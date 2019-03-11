@@ -1,34 +1,34 @@
 @model SC.BL.Domain.Ticket
 
 @{
-    ViewBag.Title = "Ticket wijzigen";
+	ViewBag.Title = "Ticket wijzigen";
 }
 
 <h2>Ticket wijzigen</h2>
 
 <form asp-controller="Ticket" asp-action="Edit" asp-route-id="@Model.TicketNumber" method="post">
-    <div class="form-group">
-        <label asp-for="TicketNumber">Id</label><input asp-for="TicketNumber" class="form-control" readonly/>
-        <span asp-validation-for="TicketNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="AccountId">Account</label><input asp-for="AccountId" class="form-control"/>
-        <span asp-validation-for="AccountId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Text">Probleem</label><input asp-for="Text" class="form-control"/>
-        <span asp-validation-for="Text" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DateOpened">Aangemaakt op</label><input asp-for="DateOpened" class="form-control"/>
-        <span asp-validation-for="DateOpened" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="State">Status</label>
-        @* <input asp-for="State" class="form-control"/> *@
-        <select asp-for="State" asp-items="@(new SelectList(Enum.GetValues(typeof(SC.BL.Domain.TicketState))))" class="form-control"></select>
-        <span asp-validation-for="State" class="text-danger"></span>
-    </div>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="submit" value="Opslaan"/> | <a asp-action="Index">Annuleer</a>
+	<div class="form-group">
+		<label asp-for="TicketNumber">Id</label><input asp-for="TicketNumber" class="form-control" readonly/>
+		<span asp-validation-for="TicketNumber" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="AccountId">Account</label><input asp-for="AccountId" class="form-control"/>
+		<span asp-validation-for="AccountId" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Text">Probleem</label><input asp-for="Text" class="form-control"/>
+		<span asp-validation-for="Text" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="DateOpened">Aangemaakt op</label><input asp-for="DateOpened" class="form-control"/>
+		<span asp-validation-for="DateOpened" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="State">Status</label>
+		@* <input asp-for="State" class="form-control"/> *@
+		<select asp-for="State" asp-items="@(new SelectList(Enum.GetValues(typeof(SC.BL.Domain.TicketState))))" class="form-control"></select>
+		<span asp-validation-for="State" class="text-danger"></span>
+	</div>
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<input type="submit" value="Opslaan"/> | <a asp-action="Index">Annuleer</a>
 </form>

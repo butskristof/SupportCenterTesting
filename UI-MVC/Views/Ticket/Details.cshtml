@@ -2,17 +2,17 @@
 @model SC.BL.Domain.Ticket
 
 @{
-    ViewBag.Title = "Ticket";
+	ViewBag.Title = "Ticket";
 }
 
 <h2>Ticket</h2>
 
 @*<dl class="dl-horizontal">
-    <dt>Id</dt><dd>@Model.TicketNumber</dd>
-    <dt>Account</dt><dd>@Model.AccountId</dd>
-    <dt>Probleem</dt><dd>@Model.Text</dd>
-    <dt>Aangemaakt op</dt><dd>@Model.DateOpened</dd>
-    <dt>Status</dt><dd>@Model.State</dd>
+	<dt>Id</dt><dd>@Model.TicketNumber</dd>
+	<dt>Account</dt><dd>@Model.AccountId</dd>
+	<dt>Probleem</dt><dd>@Model.Text</dd>
+	<dt>Aangemaakt op</dt><dd>@Model.DateOpened</dd>
+	<dt>Status</dt><dd>@Model.State</dd>
 </dl>*@
 <partial name="_TicketDetailsPartial" for="@Model"/>
 
@@ -21,15 +21,15 @@
 <h3>Responses</h3>
 <p><button class="btn btn-default" onclick="loadResponsesOfTicket(@Model.TicketNumber)">(Her)laad antwoorden</button></p>
 <table id="responses" class="table">
-    <tr>
-        <th>Antwoord</th><th>Datum</th><th>Klant antwoord?</th>
-    </tr>
-    @foreach (TicketResponse response in (IEnumerable<TicketResponse>) ViewBag.Responses)
-    {
-        <tr>
-            <td>@response.Text</td><td>@response.Date</td><td><input asp-for="@response.IsClientResponse" disabled/></td>
-        </tr>
-    }
+	<tr>
+		<th>Antwoord</th><th>Datum</th><th>Klant antwoord?</th>
+	</tr>
+	@foreach (TicketResponse response in (IEnumerable<TicketResponse>) ViewBag.Responses)
+	{
+		<tr>
+			<td>@response.Text</td><td>@response.Date</td><td><input asp-for="@response.IsClientResponse" disabled/></td>
+		</tr>
+	}
 </table>
 <input id="responseText" name="responseText" type="text" style="margin-right: 5px" />
 <button type="button" onclick="postResponse()">Verzenden</button>
@@ -37,49 +37,49 @@
 
 @section Scripts
 {
-    <script type="text/javascript">
-        // Toon responses
-        function loadResponsesOfTicket(ticketNumber) {
-            $.ajax('/api/TicketResponses?ticketnumber='+ticketNumber, {
-                    type: 'GET',
-                    dataType: 'json' // data-type expected back (response-data parsed to object)
-                })
-                .done(function (data) { showTicketResponses(data); })
-                .fail(function () { alert('Oeps, something went wrong!'); });
-        }
-        function showTicketResponses(responses) {
-            $('table#responses').find('tr:gt(0)').remove();
-            setTimeout(function () {
-                    responses.forEach(function (response) { addResponseToList(response); });
-            }, 1000);
-        }
-        function addResponseToList(response) {
-            var date = new Date(response.date);
-            var checked = response.isClientResponse ? 'checked="checked"' : '';
-            $('table#responses').append('<tr>'
-                +'<td>'+response.text+'</td>'
-                +'<td>'+date.toLocaleString()+'</td>'
-                +'<td><input type="checkbox" disabled '+checked+'/></td>'
-                +'</tr>');
-        }
-        
-        // Voeg nieuw response toe
-        function postResponse() {
-            var ticketNumber = '@Model.TicketNumber';
-            var answer = $('#responseText').val();
-            if (answer) {
-                var newResponse = { ticketNumber: ticketNumber, responseText: answer, 
-                                    isClientResponse: false }
-                $.ajax('/api/TicketResponses', { 
-                        type: 'POST',
-                        data: JSON.stringify(newResponse),
-                        contentType : 'application/json',
-                        dataType: 'json' // data-type expected back
-                    })
-                    .done(function (data) { addResponseToList(data); 
-                        $('#responseText').val(''); })
-                    .fail(function () { alert('Oeps, something went wrong!'); });
-            }
-        }
-    </script>
+	<script type="text/javascript">
+		// Toon responses
+		function loadResponsesOfTicket(ticketNumber) {
+			$.ajax('/api/TicketResponses?ticketnumber='+ticketNumber, {
+					type: 'GET',
+					dataType: 'json' // data-type expected back (response-data parsed to object)
+				})
+				.done(function (data) { showTicketResponses(data); })
+				.fail(function () { alert('Oeps, something went wrong!'); });
+		}
+		function showTicketResponses(responses) {
+			$('table#responses').find('tr:gt(0)').remove();
+			setTimeout(function () {
+					responses.forEach(function (response) { addResponseToList(response); });
+			}, 1000);
+		}
+		function addResponseToList(response) {
+			var date = new Date(response.date);
+			var checked = response.isClientResponse ? 'checked="checked"' : '';
+			$('table#responses').append('<tr>'
+				+'<td>'+response.text+'</td>'
+				+'<td>'+date.toLocaleString()+'</td>'
+				+'<td><input type="checkbox" disabled '+checked+'/></td>'
+				+'</tr>');
+		}
+		
+		// Voeg nieuw response toe
+		function postResponse() {
+			var ticketNumber = '@Model.TicketNumber';
+			var answer = $('#responseText').val();
+			if (answer) {
+				var newResponse = { ticketNumber: ticketNumber, responseText: answer, 
+									isClientResponse: false }
+				$.ajax('/api/TicketResponses', { 
+						type: 'POST',
+						data: JSON.stringify(newResponse),
+						contentType : 'application/json',
+						dataType: 'json' // data-type expected back
+					})
+					.done(function (data) { addResponseToList(data); 
+						$('#responseText').val(''); })
+					.fail(function () { alert('Oeps, something went wrong!'); });
+			}
+		}
+	</script>
 }
