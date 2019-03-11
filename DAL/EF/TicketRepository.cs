@@ -7,13 +7,20 @@ namespace SC.DAL.EF
 {
 	public class TicketRepository : ITicketRepository
 	{
-		private SupportCenterDbContext ctx = null;
+		private SupportCenterDbContext ctx;
 
+		// default implementation
 		public TicketRepository()
 		{
 			ctx = new SupportCenterDbContext();
 		}
 		
+		// enable dependency injection for testing
+		public TicketRepository(SupportCenterDbContext ctx)
+		{
+			this.ctx = ctx;
+		}
+
 		public IEnumerable<Ticket> ReadTickets()
 		{
 			IEnumerable<Ticket> tickets = ctx.Tickets
