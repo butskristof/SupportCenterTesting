@@ -1,164 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-
+using System;
+using System.Linq;
+using System.Reflection;
+using Autofac;
 using SC.BL;
-using SC.BL.Domain;
-using SC.UI.CA.ExtensionMethods;
+using SC.DAL;
 
 namespace SC.UI.CA
 {
-	class Program
+	public class Program
 	{
-		private static bool quit = false;
-		private static /*readonly*/ ITicketManager mgr = new TicketManager();
-		private static readonly Service srv = new Service();
-
+		private static IContainer Container;
+		private static Type[] interfaces =
+		{
+			typeof(ITicketRepository),
+			typeof(ITicketManager),
+			typeof(ISupportCenterService)
+		};
+		
 		static void Main(string[] args)
 		{
-			while (!quit)
-				ShowMenu();
+			var builder = Setup(); // get interface implementations to use from user
+			builder.RegisterType<SupportCenterCA>();
+			Container = builder.Build();
+			
+			RunSupportCenter();
 		}
 
-		private static void ShowMenu()
+		private static ContainerBuilder Setup()
 		{
-			Console.WriteLine("=================================");
-			Console.WriteLine("=== HELPDESK - SUPPORT CENTER ===");
-			Console.WriteLine("=================================");
-			Console.WriteLine("1) Toon alle tickets");
-			Console.WriteLine("2) Toon details van een ticket");
-			Console.WriteLine("3) Toon de antwoorden van een ticket");
-			Console.WriteLine("4) Maak een nieuw ticket");
-			Console.WriteLine("5) Geef een antwoord op een ticket");
-			Console.WriteLine("0) Afsluiten");
-			try
-			{
-				DetectMenuAction();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine();
-				Console.WriteLine("Er heeft zich een onverwachte fout voorgedaan!");
-				Console.WriteLine();
-			}
-		}
+			// For each defined interface, we'll loop through the possible implementations (which are dynamically
+			// gathered) and offer the user a choice for which one has to be used.
 
-		private static void DetectMenuAction()
-		{
-			bool inValidAction = false;
-			do
+			Console.WriteLine("Before starting the console application, we'll configure which implementations are to be used.");
+			var builder = new ContainerBuilder();
+
+			foreach (Type iface in interfaces)
 			{
-				inValidAction = false;
-				Console.Write("Keuze: ");
-				string input = Console.ReadLine();
-				int action;
-				if (Int32.TryParse(input, out action))
+				// loop until user passes in a valid option
+				bool valid = false;
+				while (!valid)
 				{
-					mgr = new TicketManager();
-					switch (action)
+					Console.WriteLine("=================");
+					Console.WriteLine(iface.Name);
+					Console.WriteLine("=================");
+
+					// get types implementing the current interface
+					var types = Assembly.GetAssembly(iface) // access the assembly where the interface is defined
+						.GetTypes()
+						.Where(t => t.IsClass && t.GetInterfaces().Contains(iface))
+						.ToList();
+					
+					// list options for user
+					for (int i = 0; i < types.Count(); ++i)
 					{
-						case 1:
-							PrintAllTickets(); break;
-						case 2:
-							ActionShowTicketDetails(); break;
-						case 3:
-							ActionShowTicketResponses(); break;
-						case 4:
-							ActionCreateTicket(); break;
-						case 5:
-							ActionAddResponseToTicket(); break;
-						case 0:
-							quit = true;
-							return;
-						default:
-							Console.WriteLine("Geen geldige keuze!");
-							inValidAction = true;
-							break;
+						Console.WriteLine("\t{0}: {1}", i + 1, types[i].Name);
 					}
+
+					Console.Write("Your choice: ");
+					int input;
+					if (
+						Int32.TryParse(Console.ReadLine(), out input) // returns false if non-numeric
+						&& input > 0 // these won't be reached if TryParse fails, so they're safe to use
+						&& input <= types.Count
+					)
+					{
+						valid = true;
+						var type = types[input - 1];
+						// register with DI container
+						Console.WriteLine("Chosen implementation: {0}", type.Name);
+						builder.RegisterType(type).As(iface);
+					}
+					else
+					{
+						Console.WriteLine("Invalid input.");
+					}
+
+					Console.WriteLine();
 				}
-			} while (inValidAction);
-		}
-
-		private static void PrintAllTickets()
-		{
-			foreach (var t in mgr.GetTickets())
-				Console.WriteLine(t.GetInfo());
-		}
-
-		private static void ActionShowTicketDetails()
-		{
-			Console.Write("Ticketnummer: ");
-			int input = Int32.Parse(Console.ReadLine());
-
-			Ticket t = mgr.GetTicket(input);
-			PrintTicketDetails(t);
-		}
-
-		private static void PrintTicketDetails(Ticket ticket)
-		{
-			Console.WriteLine("{0,-15}: {1}", "Ticket", ticket.TicketNumber);
-			Console.WriteLine("{0,-15}: {1}", "Gebruiker", ticket.AccountId);
-			Console.WriteLine("{0,-15}: {1}", "Datum", ticket.DateOpened.ToString("dd/MM/yyyy"));
-			Console.WriteLine("{0,-15}: {1}", "Status", ticket.State);
-
-			if (ticket is HardwareTicket)
-				Console.WriteLine("{0,-15}: {1}", "Toestel", ((HardwareTicket)ticket).DeviceName);
-
-			Console.WriteLine("{0,-15}: {1}", "Vraag/probleem", ticket.Text);
-		}
-
-		private static void ActionShowTicketResponses()
-		{
-			Console.Write("Ticketnummer: ");
-			int input = Int32.Parse(Console.ReadLine());
-
-			//IEnumerable<TicketResponse> responses = mgr.GetTicketResponses(input);
-			// via Web API-service
-			IEnumerable<TicketResponse> responses = srv.GetTicketResponses(input);
-
-			if (responses != null) PrintTicketResponses(responses);
-		}
-
-		private static void PrintTicketResponses(IEnumerable<TicketResponse> responses)
-		{
-			foreach (var r in responses)
-				Console.WriteLine(r.GetInfo());
-		}
-
-		private static void ActionCreateTicket()
-		{
-			int accountNumber = 0;
-			string problem = "";
-			string device = "";
-
-			Console.Write("Is het een hardware probleem (j/n)? ");
-			bool isHardwareProblem = (Console.ReadLine().ToLower() == "j");
-			if (isHardwareProblem)
-			{
-				Console.Write("Naam van het toestel: ");
-				device = Console.ReadLine();
 			}
 
-			Console.Write("Gebruikersnummer: ");
-			accountNumber = Int32.Parse(Console.ReadLine());
-			Console.Write("Probleem: ");
-			problem = Console.ReadLine();
+			Console.WriteLine("Choices registered, building application...");
 
-			if (!isHardwareProblem)
-				mgr.AddTicket(accountNumber, problem);
-			else
-				mgr.AddTicket(accountNumber, device, problem);
+			return builder;
 		}
 
-		private static void ActionAddResponseToTicket()
+		private static void RunSupportCenter()
 		{
-			Console.Write("Ticketnummer: ");
-			int ticketNumber = Int32.Parse(Console.ReadLine());
-			Console.Write("Antwoord: ");
-			string response = Console.ReadLine();
-
-			//mgr.AddTicketResponse(ticketNumber, response, false);
-			// via WebAPI-service
-			srv.AddTicketResponse(ticketNumber, response, false);
+			using (var scope = Container.BeginLifetimeScope())
+			{
+				var supportCenter = scope.Resolve<SupportCenterCA>();
+				
+				supportCenter.RunSupportCenter();
+			}
 		}
 	}
 }

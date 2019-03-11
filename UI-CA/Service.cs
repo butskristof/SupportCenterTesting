@@ -6,7 +6,13 @@ using SC.BL.Domain;
 
 namespace SC.UI.CA
 {
-	internal class Service
+	public interface ISupportCenterService
+	{
+		IEnumerable<TicketResponse> GetTicketResponses(int ticketNumber);
+		TicketResponse AddTicketResponse(int ticketNumber, string response, bool isClientResponse);
+	}
+
+	internal class Service : ISupportCenterService
 	{
 		private const string baseUri = "https://localhost:5001/api/";
 
