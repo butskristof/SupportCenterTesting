@@ -1,0 +1,15 @@
+GET https://localhost:5001/api/TicketResponses?ticketNumber=4 HTTP/1.1
+Accept: application/json
+
+###
+POST https://localhost:5001/api/TicketResponses HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+{"ticketNumber":2,"responseText":"een nieuw antwoord","isClientResponse":false}
+
+###
+PUT https://localhost:5001/api/Tickets/2/State/Closed HTTP/1.1
+
+###
+

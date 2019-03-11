@@ -1,0 +1,35 @@
+@model IEnumerable<SC.BL.Domain.Ticket>
+
+@{
+    ViewBag.Title = "Tickets";
+}
+
+<h2>Tickets</h2>
+
+<p><a asp-action="Create">Nieuw ticket</a></p>
+
+<table class="table">
+    <tr>
+        <th>Nummer</th>
+        <th>Account</th>
+        <th>Probleem</th>
+        <th>Aangemaakt op</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+    @foreach (SC.BL.Domain.Ticket ticket in Model)
+    {
+        <tr>
+            <td>@ticket.TicketNumber</td>
+            <td>@ticket.AccountId</td>
+            <td>@ticket.Text</td>
+            <td>@ticket.DateOpened</td>
+            <td>@ticket.State</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@ticket.TicketNumber">Details</a>
+                 | <a asp-action="Edit" asp-route-id="@ticket.TicketNumber">Bewerk</a>
+                 | <a asp-action="Delete" asp-route-id="@ticket.TicketNumber">Verwijder</a>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,7 @@
+*.swp
+*.iml
+.DS_Store
+**/.idea/*
+**/bin/
+**/obj/
+**/*.db
