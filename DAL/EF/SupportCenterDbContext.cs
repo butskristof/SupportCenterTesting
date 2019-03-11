@@ -19,7 +19,7 @@ namespace SC.DAL.EF
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite("Data Source=..\\SupportCenterDb_EFCodeFirst.db");
+			optionsBuilder.UseSqlite("Data Source=SupportCenterDb_EFCodeFirst.db");
 			
 			// configure logging-information
 			optionsBuilder.UseLoggerFactory(new LoggerFactory(
