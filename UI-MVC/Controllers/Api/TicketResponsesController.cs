@@ -12,7 +12,13 @@ namespace SC.UI.Web.MVC.Controllers.Api
 	[Route("api/[controller]")]
 	public class TicketResponsesController : ControllerBase
 	{
-		private ITicketManager mgr = new TicketManager();
+//		private ITicketManager mgr = new TicketManager();
+		private ITicketManager mgr;
+
+		public TicketResponsesController(ITicketManager mgr)
+		{
+			this.mgr = mgr;
+		}
 
 		// GET: api/TicketResponses?ticketNumber=5
 		[HttpGet()]

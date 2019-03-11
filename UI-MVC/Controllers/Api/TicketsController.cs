@@ -9,7 +9,13 @@ namespace SC.UI.Web.MVC.Controllers.Api
 	[Route("api/[controller]")]
 	public class TicketsController : ControllerBase
 	{
-		private ITicketManager mgr = new TicketManager();
+//		private ITicketManager mgr = new TicketManager();
+		private ITicketManager mgr;
+
+		public TicketsController(ITicketManager mgr)
+		{
+			this.mgr = mgr;
+		}
 
 		// PUT: api/Tickets/5/State/Closed
 		[HttpPut("{id}/State/Closed")]

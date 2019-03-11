@@ -10,11 +10,16 @@ namespace SC.UI.Web.MVC.Controllers
 	{
 		private ITicketManager mgr;
 
-		public TicketController()
+//		public TicketController()
+//		{
+//			mgr = new TicketManager();
+//		}
+
+		public TicketController(ITicketManager mgr)
 		{
-			mgr = new TicketManager();
+			this.mgr = mgr;
 		}
-		
+
 		// GET: /Ticket
 		public IActionResult Index()
 		{

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SC.BL;
+using SC.DAL;
+using SC.DAL.EF;
 
 namespace SC.UI.Web.MVC
 {
@@ -35,6 +38,10 @@ namespace SC.UI.Web.MVC
 			services.AddMvc()
 				.AddXmlSerializerFormatters()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			
+			// inject dependencies through default .NET Core DI container
+			services.AddScoped<ITicketManager, TicketManager>();
+			services.AddScoped<ITicketRepository, TicketRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

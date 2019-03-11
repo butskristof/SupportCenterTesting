@@ -12,10 +12,15 @@ namespace SC.BL
 	{
 		private readonly ITicketRepository repo;
 
-		public TicketManager()
+//		public TicketManager()
+//		{
+//			//repo = new TicketRepositoryHC();
+//			repo = new DAL.EF.TicketRepository();
+//		}
+
+		public TicketManager(ITicketRepository repo)
 		{
-			//repo = new TicketRepositoryHC();
-			repo = new DAL.EF.TicketRepository();
+			this.repo = repo;
 		}
 
 		public IEnumerable<Ticket> GetTickets()
