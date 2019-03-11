@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using SC.BL.Domain;
 
-namespace DAL.Tests
+namespace SC.DAL.Tests
 {
 	public static class TestTicketsProvider
 	{

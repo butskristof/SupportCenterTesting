@@ -4,7 +4,7 @@ using SC.BL.Domain;
 using SC.DAL.EF;
 using Xunit;
 
-namespace DAL.Tests
+namespace SC.DAL.Tests
 {
 	public class TicketRepositoryTests
 	{

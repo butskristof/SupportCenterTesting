@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Moq;
-using SC.BL;
 using SC.BL.Domain;
 using SC.DAL;
 using Xunit;
 
-namespace BL.Tests
+namespace SC.BL.Tests
 {
 	public class TicketManagerTests
 	{

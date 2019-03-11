@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SC.DAL.EF;
 
-namespace DAL.Tests
+namespace SC.DAL.Tests
 {
 	public class SupportCenterDbContextFactory : IDisposable
 	{
