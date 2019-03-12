@@ -31,11 +31,14 @@ namespace SC.UI.Web.MVC.Controllers
 		public IActionResult Details(int id)
 		{
 			Ticket ticket = mgr.GetTicket(id);
-			
-			if(ticket.Responses != null)
-				ViewBag.Responses = ticket.Responses;
-			else
-				ViewBag.Responses = mgr.GetTicketResponses(ticket.TicketNumber);
+
+			if (ticket != null)
+			{
+				if(ticket.Responses != null)
+					ViewBag.Responses = ticket.Responses;
+				else
+					ViewBag.Responses = mgr.GetTicketResponses(ticket.TicketNumber);
+			}
 			
 			return View(ticket);
 		}
@@ -46,6 +49,7 @@ namespace SC.UI.Web.MVC.Controllers
 			Ticket ticket = mgr.GetTicket(id);
 			return View(ticket);
 		}
+		
 		// POST: /Ticket/Edit/<ticket_number>
 		[HttpPost]
 		public IActionResult Edit(int id, Ticket ticket)
