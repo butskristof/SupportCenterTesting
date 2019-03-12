@@ -17,7 +17,7 @@ namespace SC.DAL.Tests
 				.Options;
 		}
 
-		public SupportCenterDbContext CreateContext()
+		public SupportCenterDbContext CreateContext(bool addTestData = true)
 		{
 			if (_connection == null)
 			{
@@ -28,8 +28,11 @@ namespace SC.DAL.Tests
 				using (var ctx = new SupportCenterDbContext(options))
 				{
 					ctx.Database.EnsureCreated();
-					ctx.AddRange(TestTicketsProvider.GetTestTickets());
-					ctx.SaveChanges();
+					if (addTestData)
+					{
+						ctx.AddRange(TestTicketsProvider.GetTestTickets());
+						ctx.SaveChanges();
+					}
 				}
 			}
 			
