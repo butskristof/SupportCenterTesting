@@ -12,7 +12,7 @@ namespace SC.BL.Tests
 	public class TicketManagerTests
 	{
 		[Fact]
-		public void TestGetTicketsEmpty()
+		public void GetTickets_WithEmptyRepo_ReturnsEmptyCollection()
 		{
 			// arrange
 			var repo = new Mock<ITicketRepository>();
@@ -29,7 +29,7 @@ namespace SC.BL.Tests
 		}
 
 		[Fact]
-		public void TestGetTicketsWithTicketsAvailable()
+		public void GetTickets_WithTicketsAvailable_ReturnsListOfTickets()
 		{
 			// arrange
 			var repo = new Mock<ITicketRepository>();
@@ -46,7 +46,7 @@ namespace SC.BL.Tests
 		}
 
 		[Fact]
-		public void TestGetTicketInvalidId()
+		public void GetTicket_WithInvalidId_ReturnsNull()
 		{
 			// arrange
 			var repo = new Mock<ITicketRepository>();
@@ -63,7 +63,7 @@ namespace SC.BL.Tests
 		}
 
 		[Fact]
-		public void TestGetTicketValidId()
+		public void GetTicket_WithValidId_ReturnsTicket()
 		{
 			// arrange
 			int ticketId = 1;
@@ -81,7 +81,7 @@ namespace SC.BL.Tests
 		}
 
 		[Fact]
-		public void TestAddTicketValid()
+		public void AddTicket_WithValidTicket_ReturnsAddedTicket()
 		{
 			// arrange
 			int accountid = 1;
@@ -106,7 +106,7 @@ namespace SC.BL.Tests
 		}
 		
 		[Fact]
-		public void TestAddTicketInvalidText()
+		public void AddTicket_WithInvalidText_ReturnsValidationError()
 		{
 			// arrange
 			int accountid = 1;
@@ -125,7 +125,7 @@ namespace SC.BL.Tests
 		}
 		
 		[Fact]
-		public void TestAddHardwareTicketValid()
+		public void AddHardwareTicket_WithValidTicket_ReturnsAddedTicket()
 		{
 			// arrange
 			int accountid = 1;
@@ -151,7 +151,7 @@ namespace SC.BL.Tests
 		}
 		
 		[Fact]
-		public void TestAddHardwareTicketInvalidDeviceName()
+		public void AddHardwareTicket_WithInvalidDeviceName_ReturnsValidationError()
 		{
 			// arrange
 			int accountid = 1;
@@ -171,7 +171,7 @@ namespace SC.BL.Tests
 		}
 		
 		[Fact]
-		public void TestAddHardwareTicketInvalidText()
+		public void AddHardwareTicket_WithInvalidText_ReturnsValidationError()
 		{
 			// arrange
 			int accountid = 1;
@@ -191,7 +191,7 @@ namespace SC.BL.Tests
 		}
 		
 		[Fact]
-		public void TestAddHardwareTicketInvalidTextAndDeviceName()
+		public void AddHardwareTicket_WithInvalidTextAndDeviceName_ReturnsValidationError()
 		{
 			// arrange
 			int accountid = 1;
