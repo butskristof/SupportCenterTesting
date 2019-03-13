@@ -57,7 +57,7 @@ namespace SC.UI.Web.MVC
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+//			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 

@@ -14,7 +14,7 @@ namespace SC.UI.CA
 
 	internal class Service : ISupportCenterService
 	{
-		private const string baseUri = "https://localhost:5001/api/";
+		private const string baseUri = "http://localhost:5000/api/";
 
 		private HttpClient GetNewHttpClient()
 		{
