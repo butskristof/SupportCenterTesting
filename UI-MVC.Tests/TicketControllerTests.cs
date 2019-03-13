@@ -60,8 +60,26 @@ namespace SC.UI.Web.MVC.Tests
 //			Assert.True(responesEqual);
 		}
 
+//		[Fact]
+//		public void Details_WithInvalidId_ThrowsNullReferenceException()
+//		{
+//			// arrange
+//			int ticketId = 1;
+//			var mgr = new Mock<ITicketManager>();
+//			mgr
+//				.Setup(x => x.GetTicket(ticketId))
+//				.Returns((Ticket) null);
+//			var controller = new TicketController(mgr.Object);
+//			
+//			// act
+//			Action result = () => controller.Details(ticketId);
+//			
+//			// assert
+//			Assert.Throws<NullReferenceException>(result);
+//		}
+
 		[Fact]
-		public void Details_WithInvalidId_ThrowsNullReferenceException()
+		public void Details_WithInvalidId_ReturnsNullAsViewResult()
 		{
 			// arrange
 			int ticketId = 1;
@@ -72,10 +90,11 @@ namespace SC.UI.Web.MVC.Tests
 			var controller = new TicketController(mgr.Object);
 			
 			// act
-			Action result = () => controller.Details(ticketId);
+			var result = controller.Details(ticketId);
 			
 			// assert
-			Assert.Throws<NullReferenceException>(result);
+			var viewResult = Assert.IsType<ViewResult>(result);
+			Assert.Null(viewResult.Model);
 		}
 		
 		[Fact]
